@@ -7,6 +7,11 @@ ol, ul {
   padding-left: 30px;
 }
 
+button {
+  text-align: left;
+  display: block;
+}
+
 .board-row:after {
   clear: both;
   content: "";
@@ -47,4 +52,8 @@ ol, ul {
 
 .game-info {
   margin-left: 20px;
+}
+
+.selected {
+  font-weight: bold;
 }
