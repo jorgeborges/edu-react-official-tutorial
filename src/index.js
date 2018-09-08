@@ -14,11 +14,11 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
+  renderSquare(i, points) {
     return (
       <Square
         value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
+        onClick={() => this.props.onClick(i, points)}
       />
     );
   }
@@ -27,19 +27,19 @@ class Board extends React.Component {
     return (
       <div>
         <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
+          {this.renderSquare(0, {x: 1, y: 1})}
+          {this.renderSquare(1, {x: 1, y: 2})}
+          {this.renderSquare(2, {x: 1, y: 3})}
         </div>
         <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
+          {this.renderSquare(3, {x: 2, y: 1})}
+          {this.renderSquare(4, {x: 2, y: 2})}
+          {this.renderSquare(5, {x: 2, y: 3})}
         </div>
         <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
+          {this.renderSquare(6, {x: 3, y: 1})}
+          {this.renderSquare(7, {x: 4, y: 2})}
+          {this.renderSquare(8, {x: 5, y: 3})}
         </div>
       </div>
     );
@@ -52,13 +52,14 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+        points: {x: null, y: null}
       }],
       stepNumber: 0,
       xIsNext: true,
     };
   }
 
-  handleClick(i) {
+  handleClick(i, points) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
@@ -72,6 +73,7 @@ class Game extends React.Component {
     this.setState({
       history: history.concat([{
         squares: squares,
+        points
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
@@ -96,7 +98,7 @@ class Game extends React.Component {
 
     const moves = history.map((step, move) => {
       const desc = move ?
-        'Go to move #' + move :
+        `Go to move #${move} (${step.points.x}, ${step.points.y})` :
         'Go to game start';
       return (
         <li key={move}>
@@ -117,7 +119,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
-            onClick={(i) => this.handleClick(i)}
+            onClick={(i, points) => this.handleClick(i, points)}
           />
         </div>
         <div className="game-info">
